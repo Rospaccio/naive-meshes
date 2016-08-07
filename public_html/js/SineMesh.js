@@ -67,46 +67,67 @@ SineMesh.addProbeObject = function()
 
 SineMesh.buildSimpleTestMesh = function()
 {
-    var samplesLength = 10;
-    var stepLength = 1;
-    var x = [];
-    var y = [];
-    var z = [];
+    var samplesLength = 100;
+    var stepLength = Math.PI * 0.125;
+    var x = [[]];
+    var y = [[]];
+    var z = [[]];
     
     for(var xIndex = 0; xIndex < samplesLength; xIndex ++)
-    {        
+    {    
+        x[xIndex] = [];
+        y[xIndex] = [];
+        z[xIndex] = [];
         for(var i = 0; i < samplesLength; i++)
         {
-            x[xIndex, i] = xIndex * stepLength;
-            y[xIndex, i] = i * stepLength;
-            z[xIndex, i] = Math.sin(x[xIndex, i]) + Math.sin(y[xIndex, i]);
+            x[xIndex][i] = xIndex * stepLength;
+            y[xIndex][i] = i * stepLength;
+            z[xIndex][i] = Math.sin(x[xIndex][i]) + Math.sin(y[xIndex][i])
+                * 0.1 * x[xIndex][i];
         }
-        console.log(JSON.stringify(x[xIndex]));
-        console.log(JSON.stringify(y[xIndex]));
-        console.log(JSON.stringify(z[xIndex]));
+//        console.log(JSON.stringify(x[xIndex]));
+//        console.log(JSON.stringify(y[xIndex]));
+//        console.log(JSON.stringify(z[xIndex]));
     }
     
     // the geometry
     var surfaceGeometry = new THREE.Geometry();
     // vertices
-    for (var xIndex = 0; xIndex < samplesLength; xIndex++)
+    for (var xIndex = 0; xIndex < samplesLength - 1; xIndex++)
     {
+//        console.log("Computing vertices for line number " + xIndex);
         for (var i = 0; i < samplesLength; i++)
         {
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex, i],       y[xIndex, i],       z[xIndex, i]));
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex, i],       y[xIndex, i + 1],   z[xIndex, i + 1]));
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1, i],    y[xIndex + 1, i],   z[xIndex + 1, i]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i],       z[xIndex][i]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i + 1],   z[xIndex][i + 1]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],    y[xIndex + 1][i],   z[xIndex + 1][i]));
 
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1, i],  y[xIndex + 1, i],         z[xIndex + 1, i]));
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex, i + 1],      y[xIndex, i + 1],       z[xIndex, i + 1]));
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1, i + 1],  y[xIndex + 1, i + 1],   z[xIndex + 1, i + 1]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],  y[xIndex + 1][i],         z[xIndex + 1][i]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i + 1],      y[xIndex][i + 1],       z[xIndex][i + 1]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i + 1],  y[xIndex + 1][i + 1],   z[xIndex + 1][i + 1]));
         }
     }
     
-    for(var i = 0; i < samplesLength; i++)
+//    var j = 0;
+//    for (var xIndex = 0; xIndex < samplesLength - 1; xIndex++)
+//    {
+//        for (var i = 0; i < samplesLength; i++)
+//        {
+//            j = xIndex * 6;
+//            surfaceGeometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
+//            surfaceGeometry.faces.push(new THREE.Face3(j + 3, j + 4, j + 5));
+//        }
+//    }
+    
+    console.log("vertices => " + surfaceGeometry.vertices.length);
+    for (var i = 0; i < samplesLength * (samplesLength - 1); i++)
     {
-        surfaceGeometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
-        surfaceGeometry.faces.push(new THREE.Face3(i + 3, i + 4, i +5));
+        var j = i * 6;
+
+        if (i % samplesLength !== (samplesLength - 1)) {
+            surfaceGeometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
+            surfaceGeometry.faces.push(new THREE.Face3(j + 3, j + 4, j + 5));
+        }
     }
     
     var material = new THREE.MeshLambertMaterial({color: 0x005588});
