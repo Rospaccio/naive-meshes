@@ -83,7 +83,7 @@ SineMesh.buildSimpleTestMesh = function()
             x[xIndex][i] = xIndex * stepLength;
             y[xIndex][i] = i * stepLength;
             z[xIndex][i] = Math.sin(x[xIndex][i]) + Math.sin(y[xIndex][i])
-                * 0.1 * x[xIndex][i];
+                * 0.2 * x[xIndex][i];
         }
 //        console.log(JSON.stringify(x[xIndex]));
 //        console.log(JSON.stringify(y[xIndex]));
@@ -98,13 +98,23 @@ SineMesh.buildSimpleTestMesh = function()
 //        console.log("Computing vertices for line number " + xIndex);
         for (var i = 0; i < samplesLength; i++)
         {
+            // positive
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i],       z[xIndex][i]));
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],    y[xIndex + 1][i],   z[xIndex + 1][i]));
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i + 1],   z[xIndex][i + 1]));
+            // negative
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i],       z[xIndex][i]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i + 1],   z[xIndex][i + 1]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],    y[xIndex + 1][i],   z[xIndex + 1][i]));
 
+            // positive
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],  y[xIndex + 1][i],         z[xIndex + 1][i]));
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i + 1],  y[xIndex + 1][i + 1],   z[xIndex + 1][i + 1]));
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i + 1],      y[xIndex][i + 1],       z[xIndex][i + 1]));
+            // negative
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],  y[xIndex + 1][i],         z[xIndex + 1][i]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i + 1],      y[xIndex][i + 1],       z[xIndex][i + 1]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i + 1],  y[xIndex + 1][i + 1],   z[xIndex + 1][i + 1]));
         }
     }
     
@@ -122,11 +132,13 @@ SineMesh.buildSimpleTestMesh = function()
     console.log("vertices => " + surfaceGeometry.vertices.length);
     for (var i = 0; i < samplesLength * (samplesLength - 1); i++)
     {
-        var j = i * 6;
+        var j = i * 12;
 
         if (i % samplesLength !== (samplesLength - 1)) {
             surfaceGeometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
             surfaceGeometry.faces.push(new THREE.Face3(j + 3, j + 4, j + 5));
+            surfaceGeometry.faces.push(new THREE.Face3(j + 6, j + 7, j + 8));
+            surfaceGeometry.faces.push(new THREE.Face3(j + 9, j + 10, j + 11));
         }
     }
     
