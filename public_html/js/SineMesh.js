@@ -24,7 +24,7 @@ SineMesh.init = function()
     SineMesh.scene.add(directionalLight);
 
     var additionalDirectionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-    additionalDirectionalLight.position.set(1, 0, -1);
+    additionalDirectionalLight.position.set(1, 0, 1);
     SineMesh.scene.add(additionalDirectionalLight);
     
     SineMesh.axisHelper = new THREE.AxisHelper(20);
@@ -42,7 +42,7 @@ SineMesh.start = function()
     SineMesh.init();
     SineMesh.camera.position.x = 0; // = new THREE.Vector3(-20, 20);
     SineMesh.camera.position.y = 0;
-    SineMesh.camera.position.z = -20;
+    SineMesh.camera.position.z = 20;
     SineMesh.camera.lookAt(new THREE.Vector3(0, 0, 0));
     SineMesh.buildSimpleTestMesh();
     // SineMesh.addProbeObject();
@@ -99,12 +99,12 @@ SineMesh.buildSimpleTestMesh = function()
         for (var i = 0; i < samplesLength; i++)
         {
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i],       z[xIndex][i]));
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i + 1],   z[xIndex][i + 1]));
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],    y[xIndex + 1][i],   z[xIndex + 1][i]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i],       y[xIndex][i + 1],   z[xIndex][i + 1]));
 
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i],  y[xIndex + 1][i],         z[xIndex + 1][i]));
-            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i + 1],      y[xIndex][i + 1],       z[xIndex][i + 1]));
             surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex + 1][i + 1],  y[xIndex + 1][i + 1],   z[xIndex + 1][i + 1]));
+            surfaceGeometry.vertices.push(new THREE.Vector3(x[xIndex][i + 1],      y[xIndex][i + 1],       z[xIndex][i + 1]));
         }
     }
     
