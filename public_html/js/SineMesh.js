@@ -1,4 +1,11 @@
 SineMesh = {};
+var samplesLength = 100;
+var stepLength = Math.PI * 0.125;
+var x = [[]];
+var y = [[]];
+var z = [[]];
+var clock = new THREE.Clock();
+var totalTime = 0;
 
 SineMesh.init = function()
 {
@@ -9,16 +16,6 @@ SineMesh.init = function()
     SineMesh.renderer.setClearColor( 0xf0f0f0 );
     document.body.appendChild(SineMesh.renderer.domElement);
     
-    var trackBallControls = new THREE.TrackballControls(SineMesh.camera);
-    trackBallControls.rotateSpeed = 1.0;
-    trackBallControls.zoomSpeed = 1.2;
-    trackBallControls.panSpeed = 0.8;
-    trackBallControls.noZoom = false;
-    trackBallControls.noPan = false;
-    trackBallControls.staticMoving = true;
-    trackBallControls.dynamicDampingFactor = 0.3;
-    SineMesh.controls = trackBallControls;
-    
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
     directionalLight.position.set(0, 1, 0);
     SineMesh.scene.add(directionalLight);
@@ -27,23 +24,43 @@ SineMesh.init = function()
     additionalDirectionalLight.position.set(1, 0, 1);
     SineMesh.scene.add(additionalDirectionalLight);
     
+    var ambientLight = new THREE.AmbientLight({color: 0xffffff});
+    SineMesh.scene.add(ambientLight);
+    
     SineMesh.axisHelper = new THREE.AxisHelper(20);
     SineMesh.scene.add(SineMesh.axisHelper);
     
-//    var shape = new THREE.BoxGeometry(1, 1, 1);
-//    var material = new THREE.MeshLambertMaterial({color: 0x00ff00});
-//    var mesh = new THREE.Mesh(shape, material);
-//    SineMesh.scene.add(mesh);
-//    mesh.position.y = 5;
+};
+
+SineMesh.initCameraAndControls = function()
+{
+    SineMesh.camera.position.y = -40;
+    SineMesh.camera.position.z = 40;
+//    SineMesh.camera.position.x = 40;
+    
+//    SineMesh.controls.enabled = false;
+    
+    SineMesh.camera.rotation.x = Math.PI;
+    SineMesh.camera.rotation.y = Math.PI;
+//    SineMesh.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    
+//    SineMesh.controls.enabled = true;
+    
+    var trackBallControls = new THREE.TrackballControls(SineMesh.camera);
+    trackBallControls.rotateSpeed = 1.0;
+    trackBallControls.zoomSpeed = 1.2;
+    trackBallControls.panSpeed = 0.8;
+    trackBallControls.noZoom = false;
+    trackBallControls.noPan = false;
+    trackBallControls.staticMoving = false;
+    trackBallControls.dynamicDampingFactor = 0.3;
+    SineMesh.controls = trackBallControls;
 };
 
 SineMesh.start = function()
 {
     SineMesh.init();
-    SineMesh.camera.position.x = 0; // = new THREE.Vector3(-20, 20);
-    SineMesh.camera.position.y = 0;
-    SineMesh.camera.position.z = 20;
-    SineMesh.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    SineMesh.initCameraAndControls();
     SineMesh.buildSimpleTestMesh();
     // SineMesh.addProbeObject();
     
@@ -53,9 +70,32 @@ SineMesh.start = function()
 function render()
 {
     requestAnimationFrame(render);
+    
+    SineMesh.updateObjects(clock.getDelta());
+    
     SineMesh.controls.update(.02);
     SineMesh.renderer.render(SineMesh.scene, SineMesh.camera);
 }
+
+SineMesh.updateObjects = function(t)
+{
+    var counter = 0;
+    for(var i = 0; i < samplesLength - 1; i++)
+    {
+        for(var j = 0; j < samplesLength; j++)
+        {
+            for(var k = 0; k < 12; k++)
+            {
+                var deltaZ = .05 * Math.sin(totalTime + x[i][j])
+                    + .05 * Math.sin(totalTime + y[i][j]);
+                SineMesh.mesh.geometry.vertices[counter].z += deltaZ;
+                counter++;
+            }
+        }
+    }
+    totalTime += t;
+    SineMesh.mesh.geometry.verticesNeedUpdate = true;
+};
 
 SineMesh.addProbeObject = function()
 {
@@ -63,16 +103,10 @@ SineMesh.addProbeObject = function()
     var material = new THREE.MeshLambertMaterial({color: 0x0ffff0});
     var mesh = new THREE.Mesh(box, material);
     SineMesh.scene.add(mesh);
-}
+};
 
 SineMesh.buildSimpleTestMesh = function()
-{
-    var samplesLength = 100;
-    var stepLength = Math.PI * 0.125;
-    var x = [[]];
-    var y = [[]];
-    var z = [[]];
-    
+{   
     for(var xIndex = 0; xIndex < samplesLength; xIndex ++)
     {    
         x[xIndex] = [];
@@ -83,11 +117,8 @@ SineMesh.buildSimpleTestMesh = function()
             x[xIndex][i] = xIndex * stepLength;
             y[xIndex][i] = i * stepLength;
             z[xIndex][i] = Math.sin(x[xIndex][i]) + Math.sin(y[xIndex][i])
-                * 0.2 * x[xIndex][i];
+                * 0.1 * x[xIndex][i] + .1 * y[xIndex][i];
         }
-//        console.log(JSON.stringify(x[xIndex]));
-//        console.log(JSON.stringify(y[xIndex]));
-//        console.log(JSON.stringify(z[xIndex]));
     }
     
     // the geometry
@@ -118,17 +149,6 @@ SineMesh.buildSimpleTestMesh = function()
         }
     }
     
-//    var j = 0;
-//    for (var xIndex = 0; xIndex < samplesLength - 1; xIndex++)
-//    {
-//        for (var i = 0; i < samplesLength; i++)
-//        {
-//            j = xIndex * 6;
-//            surfaceGeometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
-//            surfaceGeometry.faces.push(new THREE.Face3(j + 3, j + 4, j + 5));
-//        }
-//    }
-    
     console.log("vertices => " + surfaceGeometry.vertices.length);
     for (var i = 0; i < samplesLength * (samplesLength - 1); i++)
     {
@@ -149,7 +169,8 @@ SineMesh.buildSimpleTestMesh = function()
     surfaceGeometry.computeBoundingSphere();
     
     SineMesh.scene.add(mesh);
-}
+    SineMesh.mesh = mesh;
+};
 
 //SineMesh.buildSingleStripeOfMesh = function(xFirstIndex, )
 //{
