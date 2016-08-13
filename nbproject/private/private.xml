@@ -6,12 +6,13 @@
             <file>file:/D:/workspace-kawa/Flying-cubes/public_html/index.html</file>
             <file>file:/D:/workspace-kawa/Flying-cubes/public_html/js/FlyingCubes.App.js</file>
         </group>
+        <group name="fatturapa-conservazione">
+            <file>file:/D:/workspace-kawa/flying-cubes/public_html/js/SineMesh.js</file>
+        </group>
         <group name="THREE.js">
             <file>file:/D:/workspace-mars-new/flying-cubes/public_html/index.html</file>
             <file>file:/D:/workspace-mars-new/flying-cubes/public_html/js/SineMesh.js</file>
-        </group>
-        <group name="fatturapa-conservazione">
-            <file>file:/D:/workspace-kawa/flying-cubes/public_html/js/SineMesh.js</file>
+            <file>file:/D:/workspace-mars-new/flying-cubes/README.md</file>
         </group>
     </open-files>
 </project-private>
