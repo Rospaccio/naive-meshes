@@ -1,6 +1,6 @@
 SineMesh = {};
 var samplesLength = 100;
-var stepLength = Math.PI * 0.125;
+var stepLength = .25;
 var x = [[]];
 var y = [[]];
 var z = [[]];
