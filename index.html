@@ -29,8 +29,8 @@
         
         <div id="controlsContainer" style="position: absolute; top: 10px; width: 100%; text-align: center;">
             <label for="functionInput" id="functionLabel">Type a function</label>
-            <input id="functionInput" type="text" style="width:30%;" value="test">
-            <button id="tryMe" value="try">Try me!</button>
+            <input onclick="this.focus();" id="functionInput" type="text" style="width:30%;" value="test">
+            <button id="tryMe" value="try" onclick="SineMesh.computeFunction()">Try me!</button>
         </div>
         
     </body>
