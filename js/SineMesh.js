@@ -105,6 +105,8 @@ SineMesh.addProbeObject = function()
     SineMesh.scene.add(mesh);
 };
 
+var meshFunction = new Function('x', 'y', 'return Math.sin(x) + Math.sin(y)');
+
 SineMesh.buildSimpleTestMesh = function()
 {   
     for(var xIndex = 0; xIndex < samplesLength; xIndex ++)
@@ -116,8 +118,9 @@ SineMesh.buildSimpleTestMesh = function()
         {
             x[xIndex][i] = xIndex * stepLength;
             y[xIndex][i] = i * stepLength;
-            z[xIndex][i] = Math.sin(x[xIndex][i]) + Math.sin(y[xIndex][i])
-                * 0.1 * x[xIndex][i] + .1 * y[xIndex][i];
+            z[xIndex][i] = meshFunction(x[xIndex][i], y[xIndex][i]);
+//                    Math.sin(x[xIndex][i]) + Math.sin(y[xIndex][i])
+//                * 0.1 * x[xIndex][i] + .1 * y[xIndex][i];
         }
     }
     
@@ -172,7 +175,12 @@ SineMesh.buildSimpleTestMesh = function()
     SineMesh.mesh = mesh;
 };
 
-//SineMesh.buildSingleStripeOfMesh = function(xFirstIndex, )
-//{
-//    
-//}
+SineMesh.computeFunction = function()
+{
+    var functionText = $('#functionInput').val();
+    console.log("Computing function " + functionText);
+    functionText = "return " + functionText;
+    meshFunction = new Function('x', 'y', functionText);
+    SineMesh.scene.remove(SineMesh.mesh);
+    SineMesh.buildSimpleTestMesh();
+};
