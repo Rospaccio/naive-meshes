@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <title>Meshes in space</title>
+        <script src="js/libs/jquery/jquery.js"></script>
+        <script src="js/libs/three.js/three.js"></script>
+        <script src="js/libs/three.js/TrackballControls.js"></script>
+        <script src="js/libs/three.js/OrbitControls.js"></script>
+        <script src="js/FlyingCubes.App.js"></script>
+        <script src="js/SineMesh.js"></script>
+        <style>
+            body 
+            {
+                margin: 0; 
+                overflow: hidden;
+            }
+            canvas { width: 100%; height: 100%; }
+        </style>
+    </head>
+    <body style="background-color: azure; font-family: monospace;">
+
+        <script>
+//            FlyingCubes.start();
+            console.log("Loading");
+            $(document).ready(SineMesh.start);
+        </script>
+        
+        <div id="controlsContainer" style="position: absolute; top: 10px; width: 100%; text-align: center;">
+            <label for="functionInput" id="functionLabel">Type a function</label>
+            <input id="functionInput" type="text" style="width:30%;" value="test">
+            <button id="tryMe" value="try">Try me!</button>
+        </div>
+        
+    </body>
+</html>

@@ -32,29 +32,30 @@ SineMesh.init = function()
     
 };
 
-SineMesh.initCameraAndControls = function()
+SineMesh.initCameraAndControls = function ()
 {
+    SineMesh.camera.position.x = 40;
     SineMesh.camera.position.y = -40;
     SineMesh.camera.position.z = 40;
-//    SineMesh.camera.position.x = 40;
     
 //    SineMesh.controls.enabled = false;
     
-    SineMesh.camera.rotation.x = Math.PI;
+    SineMesh.camera.rotation.x = .5 * Math.PI;
     SineMesh.camera.rotation.y = Math.PI;
-//    SineMesh.camera.lookAt(new THREE.Vector3(0, 0, 0));
+//    SineMesh.camera.lookAt(new THREE.Vector3(-1, 1, -1));
     
 //    SineMesh.controls.enabled = true;
     
-    var trackBallControls = new THREE.TrackballControls(SineMesh.camera);
-    trackBallControls.rotateSpeed = 1.0;
-    trackBallControls.zoomSpeed = 1.2;
-    trackBallControls.panSpeed = 0.8;
-    trackBallControls.noZoom = false;
-    trackBallControls.noPan = false;
-    trackBallControls.staticMoving = false;
-    trackBallControls.dynamicDampingFactor = 0.3;
-    SineMesh.controls = trackBallControls;
+    var controls = new THREE.TrackballControls(SineMesh.camera);
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+    controls.noZoom = false;
+    controls.noPan = false;
+    controls.staticMoving = false;
+    controls.dynamicDampingFactor = 0.3;
+    SineMesh.controls = controls;
+    
 };
 
 SineMesh.start = function()
@@ -63,7 +64,6 @@ SineMesh.start = function()
     SineMesh.initCameraAndControls();
     SineMesh.buildSimpleTestMesh();
     // SineMesh.addProbeObject();
-    
     render();
 }
 
@@ -71,7 +71,7 @@ function render()
 {
     requestAnimationFrame(render);
     
-    SineMesh.updateObjects(clock.getDelta());
+//    SineMesh.updateObjects(clock.getDelta());
     
     SineMesh.controls.update(.02);
     SineMesh.renderer.render(SineMesh.scene, SineMesh.camera);
