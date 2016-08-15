@@ -1,6 +1,10 @@
 SineMesh = {};
 var samplesLength = 100;
-var stepLength = .250;
+var stepLength;
+
+var xBoundaries = {min: -10, max: 10};
+var yBoundaries = {min: -10, max: 10};
+
 var x = [[]];
 var y = [[]];
 var z = [[]];
@@ -109,6 +113,8 @@ var meshFunction = new Function('x', 'y', 'return Math.sin(x) + Math.sin(y)');
 
 SineMesh.buildSimpleTestMesh = function()
 {   
+    var xStep = (xBoundaries.max - xBoundaries.min) / samplesLength;
+    var yStep = (yBoundaries.max - yBoundaries.min) / samplesLength;
     for(var xIndex = 0; xIndex < samplesLength; xIndex ++)
     {    
         x[xIndex] = [];
@@ -116,8 +122,8 @@ SineMesh.buildSimpleTestMesh = function()
         z[xIndex] = [];
         for(var i = 0; i < samplesLength; i++)
         {
-            x[xIndex][i] = xIndex * stepLength;
-            y[xIndex][i] = i * stepLength;
+            x[xIndex][i] = xBoundaries.min + (xIndex * xStep);
+            y[xIndex][i] = yBoundaries.min + (i * yStep);
             z[xIndex][i] = meshFunction(x[xIndex][i], y[xIndex][i]);
         }
     }
@@ -175,10 +181,38 @@ SineMesh.buildSimpleTestMesh = function()
 
 SineMesh.computeFunction = function()
 {
+    SineMesh.updateBoundaries();
     var functionText = $('#functionInput').val();
     console.log("Computing function " + functionText);
     functionText = "return " + functionText;
     meshFunction = new Function('x', 'y', functionText);
     SineMesh.scene.remove(SineMesh.mesh);
     SineMesh.buildSimpleTestMesh();
+};
+
+SineMesh.updateBoundaries = function()
+{
+    var xMin = parseFloat($('#xMin').val());
+    if(!isNaN(xMin)){
+        xBoundaries.min = xMin;
+    }
+    var xMax = parseFloat($('#xMax').val());
+    if(!isNaN(xMax)){
+        xBoundaries.max = xMax;
+    }
+    
+    var yMin = parseFloat($('#yMin').val());
+    if(!isNaN(yMin)){
+        yBoundaries.min = yMin;
+    }
+    var yMax = parseFloat($('#yMax').val());
+    if(!isNaN(yMax)){
+        yBoundaries.max = yMax;
+    }
+
+    var samplesNumber = parseInt($('#samplesNumber').val(), 10);
+    console.log('samples number = ' + samplesNumber);
+    if (!isNaN(samplesNumber)) {
+        samplesLength = samplesNumber;
+    }
 };

@@ -26,11 +26,29 @@
             console.log("Loading");
             $(document).ready(SineMesh.start);
         </script>
-        
+
         <div id="controlsContainer" style="position: absolute; top: 10px; width: 100%; text-align: center;">
-            <label for="functionInput" id="functionLabel">Type a function: z = f(x, y) =</label>
-            <input onclick="this.focus();" id="functionInput" type="text" style="width:30%;" value="Math.sin(x) + Math.sin(y)">
-            <button id="tryMe" value="try" onclick="SineMesh.computeFunction()">Try me!</button>
+            <div>
+                <label for="functionInput" id="functionLabel">Type a function: z = f(x, y) =</label>
+                <input onclick="this.focus();" id="functionInput" type="text" style="width:30%;" value="Math.sin(x) + Math.sin(y)">
+                <button id="tryMe" value="try" onclick="SineMesh.computeFunction()">Try me!</button>
+            </div>
+            <div>
+                <label for="xMin">x min = </label>
+                <input id="xMin" type="text" value="-10" onclick="this.focus()">
+                <label for="xMax">x max = </label>
+                <input id="xMax" type="text" value="10" onclick="this.focus()">
+            </div>
+            <div>
+                <label for="yMin">y min = </label>
+                <input id="yMin" type="text" value="-10" onclick="this.focus()">
+                <label for="yMax">y max = </label>
+                <input id="yMax" type="text" value="10" onclick="this.focus()">
+            </div>
+            <div>
+                <label for="samplesNumber">Number of sampler per row (keep below 400 for optimal performances):</label>
+                <input id="samplesNumber" value="100" onclick="this.focus()">
+            </div>
         </div>
         
     </body>
