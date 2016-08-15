@@ -1,6 +1,6 @@
 SineMesh = {};
 var samplesLength = 100;
-var stepLength = .25;
+var stepLength = .250;
 var x = [[]];
 var y = [[]];
 var z = [[]];
@@ -119,8 +119,6 @@ SineMesh.buildSimpleTestMesh = function()
             x[xIndex][i] = xIndex * stepLength;
             y[xIndex][i] = i * stepLength;
             z[xIndex][i] = meshFunction(x[xIndex][i], y[xIndex][i]);
-//                    Math.sin(x[xIndex][i]) + Math.sin(y[xIndex][i])
-//                * 0.1 * x[xIndex][i] + .1 * y[xIndex][i];
         }
     }
     
