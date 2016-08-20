@@ -278,7 +278,8 @@ SineMesh.updateHistoryList = function () {
         deleteButton.setAttribute('sm:index', index);
         
         deleteButton.onclick = function(){
-            SineMesh.deleteFromHistoryByIndex(this.index);
+            console.log("index = " + index);
+            SineMesh.deleteFromHistoryByIndex(index);
         };
 
         item.appendChild(anchor);
