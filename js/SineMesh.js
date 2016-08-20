@@ -62,8 +62,20 @@ SineMesh.initCameraAndControls = function ()
     
 };
 
+SineMesh.initHtmlElements = function ()
+{
+    $('input[type="text"]').keypress(function (event) {
+        var keyCode = event.which;
+        if(keyCode === 13)
+        {
+            SineMesh.computeFunction();
+        }
+    });
+}
+
 SineMesh.start = function()
 {
+    SineMesh.initHtmlElements();
     SineMesh.init();
     SineMesh.initCameraAndControls();
     SineMesh.buildSimpleTestMesh();
@@ -215,4 +227,70 @@ SineMesh.updateBoundaries = function()
     if (!isNaN(samplesNumber)) {
         samplesLength = samplesNumber;
     }
+};
+
+SineMesh.historyItemClicked = function(anchor){
+    var functionText = $(anchor).text();
+    $('#functionInput').val(functionText);
+    SineMesh.computeFunction();
+};
+
+SineMesh.getHistory = function()
+{
+    var historyJson = localStorage.getItem('functionHistory');
+    if(historyJson === null)
+    {
+        historyJson = "[]";
+    }
+    var history = JSON.parse(historyJson);
+    return history;
+};
+
+SineMesh.saveHistory = function(history){
+    localStorage.setItem('functionHistory', JSON.stringify(history));
+};
+
+SineMesh.saveCurrentFunction = function()
+{
+    var functionText = $('#functionInput').val();
+    var history = SineMesh.getHistory();
+    history.push(functionText);
+    SineMesh.saveHistory(history);
+    SineMesh.updateHistoryList();
+};
+
+SineMesh.updateHistoryList = function () {
+    var history = SineMesh.getHistory();
+    var historyList = $('#historyList');
+    historyList.empty();
+
+    $(history).each(function (index, functionText) {
+        var item = document.createElement('li');
+        var anchor = document.createElement('a');
+        anchor.innerHTML = functionText;
+        anchor.href = "#";
+        anchor.onclick = function () {
+            SineMesh.historyItemClicked(this);
+        };
+        
+        var deleteButton = document.createElement('button');
+        deleteButton.innerHTML = "Delete";
+        deleteButton.setAttribute('sm:index', index);
+        
+        deleteButton.onclick = function(){
+            SineMesh.deleteFromHistoryByIndex(this.index);
+        };
+
+        item.appendChild(anchor);
+        item.appendChild(deleteButton)
+        historyList.append(item);
+    });
+};
+
+SineMesh.deleteFromHistoryByIndex = function(index)
+{
+    var history = SineMesh.getHistory();
+    history.splice(index, 1);
+    SineMesh.saveHistory(history);
+    SineMesh.updateHistoryList();
 };

@@ -27,11 +27,12 @@
             $(document).ready(SineMesh.start);
         </script>
 
-        <div id="controlsContainer" style="position: absolute; top: 10px; width: 100%; text-align: center;">
+        <div id="controlsContainer" style="position: absolute; top: 10px; width: 100%; text-align: left; padding-left: 5px;">
             <div>
                 <label for="functionInput" id="functionLabel">Type a function: z = f(x, y) =</label>
                 <input onclick="this.focus();" id="functionInput" type="text" style="width:30%;" value="Math.sin(x) + Math.sin(y)">
-                <button id="tryMe" value="try" onclick="SineMesh.computeFunction()">Try me!</button>
+                <button id="tryMe" value="try" onclick="SineMesh.computeFunction()">Draw</button>
+                <button id="save" onclick="SineMesh.saveCurrentFunction()">Save</button>
             </div>
             <div>
                 <label for="xMin">x min = </label>
@@ -46,8 +47,19 @@
                 <input id="yMax" type="text" value="10" onclick="this.focus()">
             </div>
             <div>
-                <label for="samplesNumber">Number of sampler per row (keep below 400 for optimal performances):</label>
+                <label for="samplesNumber">Number of samples per row (keep below 350 for optimal performance):</label>
                 <input id="samplesNumber" value="100" onclick="this.focus()">
+            </div>
+            <div>
+                <button id="historyButton" onclick="SineMesh.updateHistoryList(); $('#history').slideToggle()">History</button>
+            </div>
+            <div id="history" style="display: none;">
+                <ul id="historyList">
+                    <li>
+                        <a href="#" onclick="SineMesh.historyItemClicked(this)">Math.sin(x)</a> 
+                        <button id="test" sm:functionIndex="merka">Delete</button> 
+                    </li>
+                </ul>
             </div>
         </div>
         
