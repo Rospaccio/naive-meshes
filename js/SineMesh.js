@@ -191,7 +191,7 @@ SineMesh.buildSimpleTestMesh = function()
         }
     }
     
-    var material = new THREE.MeshLambertMaterial({color: 0x005588});
+    var material = new THREE.MeshNormalMaterial();
     var mesh = new THREE.Mesh(surfaceGeometry, material);
     surfaceGeometry.computeFaceNormals();
     surfaceGeometry.computeVertexNormals();
