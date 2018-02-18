@@ -71,17 +71,27 @@ SineMesh.initHtmlElements = function ()
             SineMesh.computeFunction();
         }
     });
-}
+};
 
 SineMesh.start = function()
 {
     SineMesh.initHtmlElements();
     SineMesh.init();
     SineMesh.initCameraAndControls();
+    
+    //
+    var queryParams = SineMesh.parseQueryParams(window.location.href);
+    console.log("Query params: ", queryParams);
+    if(queryParams && queryParams.hasOwnProperty("function")){
+        var functionText = decodeURI(queryParams["function"]);
+        SineMesh.setMeshFunction(functionText);
+    }
+    //
+    
     SineMesh.buildSimpleTestMesh();
     // SineMesh.addProbeObject();
     render();
-}
+};
 
 function render()
 {
@@ -195,11 +205,26 @@ SineMesh.computeFunction = function()
 {
     SineMesh.updateBoundaries();
     var functionText = $('#functionInput').val();
-    console.log("Computing function " + functionText);
-    functionText = "return " + functionText;
-    meshFunction = new Function('x', 'y', functionText);
+    
+    SineMesh.updateAddressBar(functionText);
+    
+    SineMesh.setMeshFunction(functionText);
     SineMesh.scene.remove(SineMesh.mesh);
     SineMesh.buildSimpleTestMesh();
+};
+
+SineMesh.setMeshFunction = function (functionText) {
+    console.log("Computing function " + functionText);
+    $('#functionInput').val(functionText);
+    functionText = "return " + functionText;
+    meshFunction = new Function('x', 'y', functionText);
+};
+
+SineMesh.updateAddressBar = function (functionText) {
+    var urlToKeep = window.location.origin + window.location.pathname;
+    var newUrl = urlToKeep + "?function=" + encodeURI(functionText);
+    console.log("New URL: ", newUrl);
+    window.history.pushState({}, "", newUrl);
 };
 
 SineMesh.updateBoundaries = function()
@@ -294,4 +319,20 @@ SineMesh.deleteFromHistoryByIndex = function(index)
     history.splice(index, 1);
     SineMesh.saveHistory(history);
     SineMesh.updateHistoryList();
+};
+
+SineMesh.parseQueryParams = function(url){
+    var queryStringStart = url.indexOf("?");
+    if (queryStringStart > 0) {
+        var queryString = url.slice((queryStringStart + 1), url.length);
+        var paramsCouples = queryString.split("&");
+        var params = {};
+        for (var i = 0; i < paramsCouples.length; i++) {
+            var keyAndValue = paramsCouples[i].split("=");
+            var key = keyAndValue[0];
+            var value = keyAndValue[1];
+            params[key] = value;
+        }
+    }
+    return params;
 };
